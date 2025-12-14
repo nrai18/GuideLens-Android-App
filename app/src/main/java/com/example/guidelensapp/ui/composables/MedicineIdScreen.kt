@@ -207,7 +207,7 @@ fun MedicineIdScreen(
                     
                     Text(
                         text = if (isScanning) 
-                            "Reading medicine information..." 
+                            "Reading medicine information..."
                         else 
                             "Point camera at medicine package",
                         fontSize = 16.sp,

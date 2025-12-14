@@ -605,53 +605,52 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
-    // Voice Command Manager
-    private var voiceCommandManager: com.example.guidelensapp.accessibility.VoiceCommandManager? = null
+    // Voice Command Manager - exposed for direct UI control in Medicine ID
+    var voiceCommandManager: com.example.guidelensapp.accessibility.VoiceCommandManager? = null
     
     // Text Recognition Manager
     private var textRecognitionManager: com.example.guidelensapp.ml.TextRecognitionManager? = null
 
     // Initialize Voice Command Manager
-    private fun initializeVoiceCommands(context: Context) {
-        voiceCommandManager = com.example.guidelensapp.accessibility.VoiceCommandManager(context).apply {
-            onAudioLevelUpdate = { level ->
-                _uiState.update { it.copy(audioLevel = level) }
-            }
-            onCommandRecognized = { command ->
-                processVoiceCommand(command)
-                // Auto-restart listening if in Medicine ID mode
-                if (_uiState.value.appMode == AppMode.MEDICINE_ID) {
-                    viewModelScope.launch {
-                        delay(1000) // Brief pause to prevent feedback loops
-                        startListeningForCommands()
-                    }
+private fun initializeVoiceCommands(context: Context) {
+    voiceCommandManager = com.example.guidelensapp.accessibility.VoiceCommandManager(context).apply {
+        onAudioLevelUpdate = { level ->
+            _uiState.update { it.copy(audioLevel = level) }
+        }
+        onCommandRecognized = { command ->
+            processVoiceCommand(command)
+            // Auto-restart listening if in Medicine ID mode
+            if (_uiState.value.appMode == AppMode.MEDICINE_ID) {
+                viewModelScope.launch {
+                    delay(1000) // Brief pause to prevent feedback loops
+                    startListeningForCommands()
                 }
             }
-            onError = { error ->
-                if (error.contains("No match")) {
-                    // Silent fail in continuous mode
-                    if (_uiState.value.appMode != AppMode.MEDICINE_ID) {
-                        ttsManager?.speak("I didn't catch that.")
-                    }
-                } else {
-                    if (_uiState.value.appMode != AppMode.MEDICINE_ID) {
-                        ttsManager?.speak("Voice error: $error")
-                    }
+        }
+        onError = { error ->
+            if (error.contains("No match")) {
+                // Silent fail in continuous mode
+                if (_uiState.value.appMode != AppMode.MEDICINE_ID) {
+                    ttsManager?.speak("I didn't catch that.")
                 }
-                
-                _uiState.update { it.copy(isListeningForCommands = false) }
-                
-                // Retry in Medicine ID mode
-                if (_uiState.value.appMode == AppMode.MEDICINE_ID) {
-                    viewModelScope.launch {
-                        delay(2000) // Wait before retrying
-                        startListeningForCommands()
-                    }
+            } else {
+                if (_uiState.value.appMode != AppMode.MEDICINE_ID) {
+                    ttsManager?.speak("Voice error: $error")
+                }
+            }
+            
+            _uiState.update { it.copy(isListeningForCommands = false) }
+            
+            // Retry in Medicine ID mode
+            if (_uiState.value.appMode == AppMode.MEDICINE_ID) {
+                viewModelScope.launch {
+                    delay(2000) // Wait before retrying
+                    startListeningForCommands()
                 }
             }
         }
     }
-
+}
     fun startListeningForCommands(force: Boolean = false) {
         if (_uiState.value.isListeningForCommands) return
         
@@ -700,9 +699,32 @@ class NavigationViewModel : ViewModel() {
             try {
                 Log.d(TAG, "📸 Starting OCR on image: ${safeBitmap.width}x${safeBitmap.height}")
                 
-                // Perform OCR
-                val extractedText = textRecognitionManager?.recognizeText(safeBitmap) ?: ""
-                safeBitmap.recycle() // Clean up our copy
+                // Match UI Overlay dimensions: fillMaxWidth(0.9f) and fillMaxHeight(0.7f)
+                // The overlay is centered in the top 60% of the screen in UI, but the camera feed
+                // fills that same 60% box, so we crop relative to the *camera image itself*.
+                
+                val cropWidth = (safeBitmap.width * 0.9f).toInt()
+                val cropHeight = (safeBitmap.height * 0.7f).toInt()
+                val cropX = (safeBitmap.width - cropWidth) / 2
+                val cropY = (safeBitmap.height - cropHeight) / 2
+                
+                Log.d(TAG, "✂️ Cropping: ${cropWidth}x${cropHeight} at ($cropX, $cropY)")
+                
+                val croppedBitmap = try {
+                     Bitmap.createBitmap(safeBitmap, cropX, cropY, cropWidth, cropHeight)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to crop, using full image", e)
+                    safeBitmap
+                }
+                
+                // Perform OCR on CROPPED image
+                val extractedText = textRecognitionManager?.recognizeText(croppedBitmap) ?: ""
+                
+                // Cleanup
+                if (croppedBitmap != safeBitmap) {
+                    croppedBitmap.recycle()
+                }
+                safeBitmap.recycle()
                 
                 Log.d(TAG, "📝 OCR Result: $extractedText")
                 
