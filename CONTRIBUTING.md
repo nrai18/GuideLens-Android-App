@@ -53,3 +53,4 @@
 <!-- Refactor: Optimize navigation logic -->
 <!-- Refactor: Modularize network layer -->
 <!-- Fix: Minor typo in log messages -->
+<!-- Refactor: Extract common utility functions -->
