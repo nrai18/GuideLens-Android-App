@@ -19,3 +19,4 @@
 <!-- Fix: Minor typo in log messages -->
 <!-- Test: Add unit test placeholders -->
 <!-- Docs: Update README with setup instructions -->
+<!-- Refactor: Simplify spatial tracking logic -->
