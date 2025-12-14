@@ -31,3 +31,4 @@
 <!-- Style: Update color palette -->
 <!-- Refactor: Clean up unused imports -->
 <!-- Fix: Gradle build cache issues -->
+<!-- Perf: Reduce startup time -->
