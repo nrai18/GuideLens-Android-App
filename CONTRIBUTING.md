@@ -23,3 +23,4 @@
 <!-- Fix: UI glitch on rotation -->
 <!-- Refactor: Clean up unused imports -->
 <!-- Feat: Refine voice command sensitivity -->
+<!-- Docs: Update README with setup instructions -->
