@@ -428,9 +428,17 @@ class NavigationViewModel : ViewModel() {
                 showModeSelector = false,
                 showObjectSelector = false
             )}
-            // Auto-start voice listening for Medicine ID mode ("Always On")
-            viewModelScope.launch {
-                delay(2000) // Brief delay for mode announcement start
+            
+            // CRITICAL: Ensure VoiceCommandManager exists for Medicine ID
+            // Initialize on Main thread if not already done
+            viewModelScope.launch(Dispatchers.Main) {
+                if (voiceCommandManager == null && applicationContext != null) {
+                    initializeVoiceCommands(applicationContext!!)
+                    Log.d(TAG, "✅ Voice Command Manager initialized for Medicine ID")
+                }
+                
+                // Auto-start voice listening after ensuring manager exists
+                delay(2000)
                 startListeningForCommands()
             }
         }
