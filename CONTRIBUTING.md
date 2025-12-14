@@ -58,3 +58,4 @@
 <!-- Feat: Add accessibility labels -->
 <!-- Feat: enhance error reporting -->
 <!-- Docs: Clarify API usage -->
+<!-- Style: Uniformize error message formatting -->
