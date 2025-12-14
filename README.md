@@ -255,7 +255,7 @@ It demonstrates that **real-time, privacy-preserving AI** can be practical on-de
 
 ## 🧑‍💻 Author & Repository
 
-**Developer:** Sri Krishna Nurandu  
+**Developer:** Naman Rai  
 **Repository:** [github.com/nrai18/GuideLens-Android-App](https://github.com/nrai18/GuideLens-Android-App)  
 **License:** [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html)  
 
