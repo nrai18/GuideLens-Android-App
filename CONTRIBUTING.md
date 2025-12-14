@@ -21,3 +21,4 @@
 <!-- Docs: Update README with setup instructions -->
 <!-- Refactor: Simplify spatial tracking logic -->
 <!-- Fix: UI glitch on rotation -->
+<!-- Refactor: Clean up unused imports -->
