@@ -40,3 +40,4 @@
 <!-- Fix: Gradle build cache issues -->
 <!-- Chore: Update build dependencies -->
 <!-- Fix: UI glitch on rotation -->
+<!-- Docs: Update internal documentation -->
