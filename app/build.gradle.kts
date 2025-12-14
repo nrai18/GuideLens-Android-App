@@ -71,6 +71,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 }
 
@@ -113,8 +116,8 @@ dependencies {
     // Accompanist for permissions
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 
-    // ML Kit Text Recognition
-    implementation("com.google.mlkit:text-recognition:16.0.0")
+    // ML Kit Text Recognition (Unbundled / Play Services version to avoid 16KB alignment issues)
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
 
     // Retrofit & Gson (Network & JSON)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
