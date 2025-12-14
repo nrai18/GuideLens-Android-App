@@ -92,9 +92,11 @@ class NavigationViewModel : ViewModel() {
                 textRecognitionManager = com.example.guidelensapp.ml.TextRecognitionManager(context)
                 Log.d(TAG, "✅ Text Recognition initialized")
 
-                // Initialize Voice Commands
-                initializeVoiceCommands(context)
-                Log.d(TAG, "✅ Voice Command Manager initialized")
+                // Initialize Voice Commands (MUST be on Main thread)
+                withContext(Dispatchers.Main) {
+                    initializeVoiceCommands(context)
+                    Log.d(TAG, "✅ Voice Command Manager initialized")
+                }
 
                 // Start orientation update loop
                 startOrientationUpdates()
