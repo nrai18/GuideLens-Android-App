@@ -17,3 +17,4 @@
 <!-- Docs: Clarify API usage -->
 <!-- Style: Update color palette -->
 <!-- Fix: Minor typo in log messages -->
+<!-- Test: Add unit test placeholders -->
