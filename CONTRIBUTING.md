@@ -35,3 +35,4 @@
 <!-- Perf: Optimize memory usage during scan -->
 <!-- Perf: Improve image processing speed -->
 <!-- Style: Uniformize error message formatting -->
+<!-- Refactor: Simplify spatial tracking logic -->
