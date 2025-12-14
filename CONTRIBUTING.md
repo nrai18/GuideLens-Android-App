@@ -55,3 +55,4 @@
 <!-- Fix: Minor typo in log messages -->
 <!-- Refactor: Extract common utility functions -->
 <!-- Docs: Add comments to ViewModel -->
+<!-- Feat: Add accessibility labels -->
