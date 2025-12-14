@@ -5,3 +5,4 @@
 <!-- Docs: Add comments to ViewModel -->
 <!-- Docs: Clarify API usage -->
 <!-- Style: Format code according to Kotlin guidelines -->
+<!-- Fix: Gradle build cache issues -->
