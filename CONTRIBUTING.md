@@ -51,3 +51,4 @@
 <!-- Test: Mock network responses -->
 <!-- Chore: Reorganize resource files -->
 <!-- Refactor: Optimize navigation logic -->
+<!-- Refactor: Modularize network layer -->
