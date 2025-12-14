@@ -27,6 +27,14 @@
     <!-- Neural Networks API support -->
     <uses-feature android:name="android.hardware.neuralnetworks" android:required="false" />
 
+    <!-- REQUIRED for Android 11+ (API 30) to see Speech Recognition Service -->
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+        <package android:name="com.google.android.googlequicksearchbox" />
+    </queries>
+
     <application
         android:name=".GuideLensApplication"
         android:allowBackup="true"
