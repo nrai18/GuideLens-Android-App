@@ -7,3 +7,4 @@
 <!-- Style: Format code according to Kotlin guidelines -->
 <!-- Fix: Gradle build cache issues -->
 <!-- Chore: Update build dependencies -->
+<!-- Style: Uniformize error message formatting -->
