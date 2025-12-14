@@ -45,3 +45,4 @@
 <!-- Refactor: Optimize navigation logic -->
 <!-- Test: Add unit test placeholders -->
 <!-- Style: Format code according to Kotlin guidelines -->
+<!-- Docs: Update internal documentation -->
