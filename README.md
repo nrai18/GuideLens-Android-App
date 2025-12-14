@@ -122,18 +122,37 @@ Dynamic profiling adjusts thresholds, frame rates, and resolution at runtime.
 
 ### Setup
 ```bash
-git clone https://github.com/N-SriKrishna/GuideLensApp.git 
-cd GuideLensApp
+git clone https://github.com/nrai18/GuideLens-Android-App.git
+cd "GuideLens App"
 ```
+
+### Python Server Setup (Medicine ID)
+The Medicine ID feature requires a local Python server.
+
+1.  **Install Python Dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+2.  **Environment Setup**:
+    Create a `.env` file in the root directory:
+    ```env
+    GEMINI_API_KEY=your_actual_api_key_here
+    ```
+
+3.  **Run Server**:
+    ```bash
+    python server.py
+    ```
 
 ### Add ML models to `app/src/main/assets/`
  - `yolov8s-worldv2_int8.onnx` (~10 MB)
  - `floor_segmentation_int8.onnx` (~3 MB)
 
 ### Build & Run
-1. **File → Sync Project with Gradle**  
-2. **Build → Make Project**  
-3. **Run → Run 'app'** (grant camera & microphone permissions)
+1.  **File → Sync Project with Gradle**
+2.  **Build → Make Project**
+3.  **Run → Run 'app'** (grant camera & microphone permissions)
 
 ---
 
@@ -237,7 +256,7 @@ It demonstrates that **real-time, privacy-preserving AI** can be practical on-de
 ## 🧑‍💻 Author & Repository
 
 **Developer:** Sri Krishna Nurandu  
-**Repository:** [github.com/N-SriKrishna/GuideLensApp](https://github.com/N-SriKrishna/GuideLensApp)  
+**Repository:** [github.com/nrai18/GuideLens-Android-App](https://github.com/nrai18/GuideLens-Android-App)  
 **License:** [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html)  
 
 ---
