@@ -174,7 +174,7 @@ The Medicine ID feature requires a local Python server.
 
 ## ⚙️ Performance & Optimization
 
-### Benchmarks (Samsung Galaxy S23, Snapdragon 8 Gen 2)
+### Benchmarks (Nothing Phone 3a, Snapdragon 7s Gen 3)
 | Component | Latency | Notes |
 |------------|----------|-------|
 | Object Detection | 150–250 ms | YOLO World INT8 + NNAPI |
