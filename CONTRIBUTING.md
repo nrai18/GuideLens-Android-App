@@ -54,3 +54,4 @@
 <!-- Refactor: Modularize network layer -->
 <!-- Fix: Minor typo in log messages -->
 <!-- Refactor: Extract common utility functions -->
+<!-- Docs: Add comments to ViewModel -->
