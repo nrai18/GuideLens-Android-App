@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.GuideLensApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.GuideLensApp" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@android:color/black</item>
+        <!-- Splash screen background -->
+        <item name="android:windowSplashScreenBackground">@android:color/black</item>
+        <!-- Window background (fallback) -->
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
 </resources>
