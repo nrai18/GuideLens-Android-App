@@ -48,3 +48,4 @@
 <!-- Docs: Update internal documentation -->
 <!-- Style: Uniformize error message formatting -->
 <!-- Docs: Add comments to ViewModel -->
+<!-- Test: Mock network responses -->
