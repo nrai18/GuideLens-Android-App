@@ -14,3 +14,4 @@
 <!-- Perf: Improve image processing speed -->
 <!-- Refactor: Modularize network layer -->
 <!-- Style: Adjust UI padding and margins -->
+<!-- Docs: Clarify API usage -->
