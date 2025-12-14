@@ -47,3 +47,4 @@
 <!-- Style: Format code according to Kotlin guidelines -->
 <!-- Docs: Update internal documentation -->
 <!-- Style: Uniformize error message formatting -->
+<!-- Docs: Add comments to ViewModel -->
