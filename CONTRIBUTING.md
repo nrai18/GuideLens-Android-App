@@ -50,3 +50,4 @@
 <!-- Docs: Add comments to ViewModel -->
 <!-- Test: Mock network responses -->
 <!-- Chore: Reorganize resource files -->
+<!-- Refactor: Optimize navigation logic -->
