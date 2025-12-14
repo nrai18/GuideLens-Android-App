@@ -18,3 +18,4 @@
 <!-- Style: Update color palette -->
 <!-- Fix: Minor typo in log messages -->
 <!-- Test: Add unit test placeholders -->
+<!-- Docs: Update README with setup instructions -->
