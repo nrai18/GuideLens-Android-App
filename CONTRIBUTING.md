@@ -26,3 +26,4 @@
 <!-- Docs: Update README with setup instructions -->
 <!-- Style: Update color palette -->
 <!-- Test: Add unit test placeholders -->
+<!-- Docs: Update README with setup instructions -->
