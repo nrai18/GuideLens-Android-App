@@ -145,4 +145,10 @@ object Config {
     // ===== API Keys =====
     // WARNING: In a real production app, use BuildConfig or a secrets manager.
     const val GEMINI_API_KEY = "AIzaSyD-yTwlxXXi8waT7pCFd3p_3LXj5TZOeUs"
+    
+    // ===== Local Server Configuration =====
+    // WiFi Connection - Phone and laptop must be on the same WiFi network
+    const val SERVER_IP = "10.22.10.170" // Laptop's WiFi IP address
+    const val SERVER_PORT = "5000"
+    const val SERVER_BASE_URL = "http://$SERVER_IP:$SERVER_PORT/"
 }
