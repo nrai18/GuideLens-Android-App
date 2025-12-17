@@ -38,6 +38,7 @@
     <application
         android:name=".GuideLensApplication"
         android:allowBackup="true"
+        android:extractNativeLibs="true"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -64,5 +65,10 @@
         <meta-data
             android:name="com.samsung.android.camera.extensions"
             android:value="true" />
+
+        <!-- ML Kit Dependency download -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
     </application>
 </manifest>

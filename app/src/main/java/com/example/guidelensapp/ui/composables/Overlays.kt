@@ -1,5 +1,6 @@
 package com.example.guidelensapp.ui.composables
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -79,6 +81,29 @@ fun OverlayCanvas(uiState: NavigationUiState) {
 
 @Composable
 fun NavigationOverlay(uiState: NavigationUiState) {
+    // 3. Pulse Animation (Must be outside Canvas)
+    val infiniteTransition = rememberInfiniteTransition(label = "detection_pulse")
+    val pulseAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 0.8f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "alpha"
+    )
+    val pulseStroke by infiniteTransition.animateFloat(
+        initialValue = 8f,
+        targetValue = 12f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "stroke"
+    )
+    
+    val baseStrokeWidth = 8f
+
     Canvas(modifier = Modifier.fillMaxSize()) {
         val canvasWidth = size.width
         val canvasHeight = size.height
@@ -101,18 +126,30 @@ fun NavigationOverlay(uiState: NavigationUiState) {
         // Draw detections
         uiState.detectedObjects.forEach { detection ->
             val rect = detection.boundingBox
-            val targetColor = Color(0xFF4CAF50)
+            // Differentiate target object (Green) from others (White/Cyan) for better UX, but animate ALL
+            val isTarget = detection.label.equals(uiState.targetObject, ignoreCase = true)
+            val baseColor = if (isTarget) Color(0xFF00E676) else Color.Cyan
+            
             val left = rect.left * scale + offsetX
             val top = rect.top * scale + offsetY
             val width = rect.width() * scale
             val height = rect.height() * scale
 
-            // Draw bounding box
-            drawRect(
-                color = targetColor,
+            // Draw animated bounding box
+            drawRoundRect(
+                color = baseColor.copy(alpha = if (isTarget) 1f else 0.8f),
                 topLeft = Offset(left, top),
                 size = Size(width, height),
-                style = Stroke(width = 8f)
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(16f),
+                style = Stroke(width = if (isTarget) pulseStroke else baseStrokeWidth) 
+            )
+            
+            // Draw pulsing fill
+            drawRoundRect(
+                color = baseColor.copy(alpha = pulseAlpha * 0.3f), // Subtle fill
+                topLeft = Offset(left, top),
+                size = Size(width, height),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(16f)
             )
 
             // Draw label
@@ -127,17 +164,22 @@ fun NavigationOverlay(uiState: NavigationUiState) {
             drawContext.canvas.nativeCanvas.apply {
                 val textBounds = android.graphics.Rect()
                 textPaint.getTextBounds(labelText, 0, labelText.length, textBounds)
-                drawRect(
+                
+                // Label background
+                drawRoundRect(
                     left,
-                    top - textBounds.height() - 20f,
-                    left + textBounds.width() + 20f,
+                    top - textBounds.height() - 30f,
+                    left + textBounds.width() + 40f,
                     top,
+                    16f,
+                    16f,
                     android.graphics.Paint().apply {
-                        color = "#4CAF50".toColorInt()
+                        color = baseColor.toArgb()
                         style = android.graphics.Paint.Style.FILL
+                        alpha = 200
                     }
                 )
-                drawText(labelText, left + 10f, top - 10f, textPaint)
+                drawText(labelText, left + 20f, top - 15f, textPaint)
             }
         }
 
