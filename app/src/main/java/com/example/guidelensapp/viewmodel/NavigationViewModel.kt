@@ -787,38 +787,56 @@ private fun initializeVoiceCommands(context: Context) {
         }
 
         _uiState.update { it.copy(isProcessing = true) }
-        speak("Analyzing with Open Artificial Intelligence...", Config.TTSPriority.NAVIGATION)
+        speak("Analyzing with Google Gemini...", Config.TTSPriority.NAVIGATION)
 
         viewModelScope.launch(threadManager.ioDispatcher) {
-            // Replaced GeminiService with OpenAIService
-            val summary = com.example.guidelensapp.network.OpenAIService.summarizeMedicine(rawText)
+            val result = com.example.guidelensapp.network.GeminiService.summarizeMedicine(rawText)
             
             withContext(Dispatchers.Main) {
-                // Check if the summary indicates failure (check for specific error strings from OpenAIService)
-                if (summary.contains("System busy") || summary.contains("Analysis failed") || summary.contains("Rate Limit")) {
-                     _uiState.update { it.copy(
-                        isProcessing = false,
-                         scannedMedicineText = "AI Limit. Opening Web Search..."
-                     )}
-                     speak("Artificial Intelligence limit reached. Searching online.", Config.TTSPriority.EMERGENCY)
-                     
-                     // Fallback: Open Google Search
-                     try {
-                         val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
-                             data = android.net.Uri.parse("https://www.google.com/search?q=${android.net.Uri.encode(rawText)}")
-                             flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-                         }
-                         applicationContext?.startActivity(intent)
-                     } catch (e: Exception) {
-                         Log.e(TAG, "Failed to open browser", e)
-                         speak("Could not open web browser.", Config.TTSPriority.EMERGENCY)
-                     }
-                } else {
-                     _uiState.update { it.copy(
-                        isProcessing = false,
-                         scannedMedicineText = summary 
-                     )}
-                     speak("Analysis complete: $summary", Config.TTSPriority.EMERGENCY)
+                when (result.source) {
+                    com.example.guidelensapp.network.GeminiService.Source.SERVER -> {
+                        // Success from local server (Gemini)
+                        _uiState.update { it.copy(
+                            isProcessing = false,
+                            scannedMedicineText = result.text
+                        )}
+                        speak("Medicine identified: ${result.text}", Config.TTSPriority.EMERGENCY)
+                        Log.d(TAG, "✅ Gemini response: ${result.text}")
+                    }
+                    
+                    com.example.guidelensapp.network.GeminiService.Source.GOOGLE -> {
+                        // Fallback to Google Search
+                        _uiState.update { it.copy(
+                            isProcessing = false,
+                            scannedMedicineText = result.text
+                        )}
+                        speak(result.text, Config.TTSPriority.EMERGENCY)
+                        Log.d(TAG, "🔄 Falling back to Google Search")
+                        
+                        // Open Google Search with filtered text
+                        val filteredText = com.example.guidelensapp.utils.TextFilterUtil.filterRelevantWords(rawText)
+                        try {
+                            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                                data = android.net.Uri.parse("https://www.google.com/search?q=${android.net.Uri.encode(filteredText)}")
+                                flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+                            }
+                            applicationContext?.startActivity(intent)
+                            Log.d(TAG, "🌐 Opened Google Search for: $filteredText")
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Failed to open browser", e)
+                            speak("Could not open web browser.", Config.TTSPriority.EMERGENCY)
+                        }
+                    }
+                    
+                    com.example.guidelensapp.network.GeminiService.Source.ERROR -> {
+                        // Error occurred
+                        _uiState.update { it.copy(
+                            isProcessing = false,
+                            scannedMedicineText = result.text
+                        )}
+                        speak("Error: ${result.text}", Config.TTSPriority.EMERGENCY)
+                        Log.e(TAG, "❌ Medicine identification error: ${result.text}")
+                    }
                 }
             }
         }
