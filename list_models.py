@@ -1,7 +1,9 @@
 import google.generativeai as genai
 import os
+from dotenv import load_dotenv
 
-API_KEY = "AIzaSyBXmBmG1T4zNwSR4lAOAjk5stWsMz6PWoo"
+load_dotenv()
+API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=API_KEY)
 
 print("Available models:")

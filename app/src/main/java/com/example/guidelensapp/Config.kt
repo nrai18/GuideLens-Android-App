@@ -143,8 +143,10 @@ object Config {
     }
 
     // ===== API Keys =====
-    // WARNING: In a real production app, use BuildConfig or a secrets manager.
-    const val GEMINI_API_KEY = "AIzaSyD-yTwlxXXi8waT7pCFd3p_3LXj5TZOeUs"
+    // SECURITY: API keys should ONLY be stored in .env file (gitignored)
+    // The server.py reads GEMINI_API_KEY from .env at runtime
+    // Android app uses local server API, so no key needed in app code
+    // DO NOT hardcode API keys here - they will be committed to Git!
     
     // ===== Local Server Configuration =====
     // WiFi Connection - Phone and laptop must be on the same WiFi network
