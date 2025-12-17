@@ -32,9 +32,12 @@ Built entirely in **Kotlin** with **Jetpack Compose**, it combines real-time **o
   *“Go straight”*, *“Bear right”*, *“Veer left”*.
 
 ### 💊 Medicine Identifier (NEW)
-- **AI-Powered Analysis** – Combines on-device **ML Kit Text Recognition** with **Gemini Pro API**.
+- **AI-Powered Analysis** – Combines on-device **ML Kit Text Recognition** with **Gemini 2.5 Flash API** via local WiFi server.
+- **100% Failsafe** – Automatic Google Search fallback for ALL errors (server offline, HTTP 500, quota exceeded, network issues).
+- **Text Filtering** – Intelligent keyword extraction focuses on medicine names, dosages, and medical terms.
+- **WiFi-Based** – Connects to local Python server on laptop (no USB required).
 - **Instant Summaries** – Reads complex medicine labels and provides concise, spoken summaries (e.g., *"Paracetamol, used for pain relief"*).
-- **Privacy-First** – Images are processed securel, with text-only data sent to the API.
+- **Privacy-First** – Images are processed securely, with text-only data sent to the API.
 
 ---
 
@@ -68,13 +71,13 @@ Built entirely in **Kotlin** with **Jetpack Compose**, it combines real-time **o
 
 | Component | Technology | Details |
 |------------|-------------|----------|
-| **Platform** | Android API 24+ | Nougat 7.0 and later |
+| **Platform** | Android API 29+ | Android 10 and later |
 | **Language** | Kotlin 100 % | Modern coroutines-based |
 | **UI** | Jetpack Compose | Material Design 3 UI |
 | **Architecture** | MVVM | `ViewModel`, `StateFlow` separation |
 | **ML Runtime** | ONNX Runtime 1.16.0 | Cross-platform INT8 optimized |
 | **OCR** | ML Kit Text Recognition | On-device fast extraction |
-| **AI API** | Google Gemini Pro | Intelligent summarization |
+| **AI API** | Google Gemini 2.5 Flash | Local server + automatic Google fallback |
 | **Sensors** | Fusion (Accel/Mag/Gyro) | Stable heading calculation |
 
 **Model Pipeline**
@@ -126,12 +129,12 @@ git clone https://github.com/nrai18/GuideLens-Android-App.git
 cd "GuideLens App"
 ```
 
-### Python Server Setup (Medicine ID)
-The Medicine ID feature requires a local Python server.
+### Python Server Setup  (Medicine ID – WiFi Connection)
+The Medicine ID feature requires a local Python server running on your laptop.
 
 1.  **Install Python Dependencies**:
     ```bash
-    pip install -r requirements.txt
+    pip install flask flask-cors google-generativeai python-dotenv
     ```
 
 2.  **Environment Setup**:
@@ -140,10 +143,30 @@ The Medicine ID feature requires a local Python server.
     GEMINI_API_KEY=your_actual_api_key_here
     ```
 
-3.  **Run Server**:
+3.  **Find Your WiFi IP** (Windows):
+    ```bash
+    ipconfig
+    # Look for "IPv4 Address" under WiFi adapter
+    ```
+
+4.  **Update App Config**:
+    Edit `app/src/main/java/com/example/guidelensapp/Config.kt`:
+    ```kotlin
+    const val SERVER_IP = "your.laptop.ip.address"  // e.g., "192.168.1.100"
+    ```
+
+5.  **Run Server**:
     ```bash
     python server.py
+    # Server will run on http://your-ip:5000
     ```
+
+6.  **Connect Phone**:
+    - Ensure phone and laptop are on the **same WiFi network**
+    - Check server health: `http://your-ip:5000/health` in phone browser
+    - If can't connect, check firewall settings
+
+**Automatic Failsafe**: If server is offline or encounters any error, app automatically opens Google Search with filtered keywords.
 
 ### Add ML models to `app/src/main/assets/`
  - `yolov8s-worldv2_int8.onnx` (~10 MB)
@@ -164,11 +187,12 @@ The Medicine ID feature requires a local Python server.
 3. Follow audio commands: “Bear right”, “Move forward”.
 4. Arrival → “Arrived at destination”.
 
-### Mectine ID
+### Medicine ID
 1. Select "Medicine Identifier" from Start Screen.
 2. Point camera at medicine box.
-3. Tap "SCAN".
-4. Listen to the AI summary.
+3. Say "scan" or tap scan button.
+4. Say "search" or "yes" when prompted.
+5. Listen to AI summary from Gemini OR Google Search opens automatically if server is offline.
 
 ---
 
