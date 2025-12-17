@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.guidelensapp"
-        minSdk = 28
+        minSdk = 29  // Android 10+
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
